@@ -22,17 +22,20 @@
     // The simplest email
     val emailMessage = email from "sender@email.com" to "receiver@email.com" subject "Hello" body "Hello World"
 
+    // Email with many receivers
+    val emailWithReceivers = email from "sender@email.com" to setOf("receiver@email.com", "another@gmail.com") subject "Hello" body "Hello World"
+
     // Email with complex body
     val emailWithComplexBody = (email from "sender@email.com" to "receiver@email.com" subject "Hello"
-            body of(
+            body listOf(
         Text of "Hello",
         Html of "<html></html>",
         Text of "Good Bye"
     ))
-    
+
     // Email with attached files
     val emailWithAttached = (email from "sender@email.com" to "receiver@email.com" subject "Hello"
-            `attached files` of("File1.txt", "File2.txt")
+            `attached files` setOf("File1.txt", "File2.txt")
             body (Html of "<html></html>"))
             
 ```

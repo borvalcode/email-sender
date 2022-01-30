@@ -17,16 +17,10 @@ class Email private constructor(
 
     companion object {
         val email get() = EmptyEmail()
-        fun of(vararg attachedFile: String) = attachedFile.toSet()
     }
 
 
     data class Body(val parts: List<Part>) {
-
-        companion object {
-            fun of(vararg part: Part) = part.toList()
-        }
-
 
         sealed class Part(val type: Type, val content: String) {
 

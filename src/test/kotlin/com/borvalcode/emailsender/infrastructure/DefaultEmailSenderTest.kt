@@ -1,7 +1,6 @@
 package com.borvalcode.emailsender.infrastructure
 
 import arrow.core.Either
-import com.borvalcode.emailsender.domain.dto.Email.Body.Companion.of
 import com.borvalcode.emailsender.domain.dto.Email.Body.Part.Html
 import com.borvalcode.emailsender.domain.dto.Email.Body.Part.Text
 import com.borvalcode.emailsender.domain.dto.Email.Companion.email
@@ -88,7 +87,7 @@ internal class DefaultEmailSenderTest {
 
         emailSender send (email from "me@me.com" to "you@gmail.com" subject "Hello"
                 `attached files` paths
-                body of(Text of "Hello", Html of "<html></html>", Text of "Good Bye"))
+                body listOf(Text of "Hello", Html of "<html></html>", Text of "Good Bye"))
 
         wiser.messages shouldHaveSize 1
         wiser.messages[0].envelopeSender `should be equal to` "me@me.com"
