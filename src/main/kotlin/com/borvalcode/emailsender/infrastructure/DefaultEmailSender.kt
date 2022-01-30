@@ -10,9 +10,7 @@ import com.borvalcode.emailsender.domain.dto.Email.Body.Part.Type.TEXT
 import com.borvalcode.emailsender.domain.dto.EmailAddress
 import com.borvalcode.emailsender.domain.dto.EmailError
 import com.borvalcode.emailsender.domain.dto.EmailServer
-import java.lang.IllegalArgumentException
 import java.util.*
-import java.util.stream.Collectors
 import javax.mail.*
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeBodyPart
@@ -61,28 +59,23 @@ class DefaultEmailSender private constructor(emailServer: EmailServer) : EmailSe
         }
 
 
-    private fun tos(to: Set<EmailAddress>): String {
-        return to.stream().map { obj: EmailAddress -> obj.value }.collect(Collectors.joining(","))
+    private fun tos(tos: Set<EmailAddress>): String {
+        return tos.joinToString(",") { it.value }
     }
 
-    private fun getContent(email: Email): Multipart {
-        val multipart: Multipart = MimeMultipart("alternative")
-
-        addBodyParts(email.body, multipart)
-
-        addAttachedFile(email.attachedFiles, multipart)
-
-        return multipart
-    }
+    private fun getContent(email: Email) =
+        MimeMultipart("alternative").let {
+            addBodyParts(email.body, it)
+            addAttachedFile(email.attachedFiles, it)
+            it
+        }
 
     private fun addAttachedFile(attachedFiles: Set<String>?, multipart: Multipart) {
         attachedFiles?.map {
             val mimeBodyPart = MimeBodyPart()
             mimeBodyPart.attachFile(it)
             mimeBodyPart
-        }?.forEach { mimeBodyPart ->
-            multipart.addBodyPart(mimeBodyPart)
-        }
+        }?.forEach { multipart.addBodyPart(it) }
     }
 
     private fun addBodyParts(emailBody: Email.Body, multipart: Multipart) {
@@ -90,9 +83,7 @@ class DefaultEmailSender private constructor(emailServer: EmailServer) : EmailSe
             val mimeBodyPart = MimeBodyPart()
             mimeBodyPart.setContent(part.content, getContentType(part.type))
             mimeBodyPart
-        }.forEach { mimeBodyPart ->
-            multipart.addBodyPart(mimeBodyPart)
-        }
+        }.forEach { multipart.addBodyPart(it) }
     }
 
     private fun getContentType(partType: Email.Body.Part.Type) =
