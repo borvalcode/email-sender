@@ -16,7 +16,7 @@
     val orThrowSender = EmailSender on inputUrl `or else` { throw RuntimeException(it.message, it.cause) }
 ```
 
-### Create and email
+### Create an email object
 
 ```
     // The simplest email
@@ -37,6 +37,14 @@
     val emailWithAttached = (email from "sender@email.com" to "receiver@email.com" subject "Hello"
             `attached files` setOf("File1.txt", "File2.txt")
             body (Html of "<html></html>"))
+            
+    // Email is also non-safe
+    email from "from" to "to" subject "subject" body "body" `or else` {
+        throw RuntimeException(
+            it.message,
+            it.cause
+        )
+    }
             
 ```
 
