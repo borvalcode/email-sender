@@ -15,30 +15,29 @@ class Email private constructor(
     val body: Body
 ) {
 
-    companion object {
-        val email get() = EmptyEmail()
-    }
-
-
     data class Body(val parts: List<Part>) {
-
         sealed class Part(val type: Type, val content: String) {
 
             enum class Type { TEXT, HTML}
 
-
             class Text(content: String) : Part(TEXT, content) {
                 companion object {
+                    @JvmStatic
                     infix fun of(content: String) = Text(content)
                 }
             }
 
             class Html(content: String) : Part(HTML, content){
                 companion object {
+                    @JvmStatic
                     infix fun of(content: String) = Html(content)
                 }
             }
         }
+    }
+
+    companion object {
+        val email get() = EmptyEmail()
     }
 
     class EmptyEmail {

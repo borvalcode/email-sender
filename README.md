@@ -4,16 +4,16 @@
 
 ```
     // Safe way of instantiating an EmailSender
-    val defaultSender = DefaultEmailSender.of(host = "localhost", port = 25)
+    val defaultSender = EmailSender.of(host = "localhost", port = 25)
 
     // Non-safe way of instantiating an EmailSender: if you ensure the url is [host]:[port], you can use method get()
-    val sender = (DefaultEmailSender on "localhost:25").get()
-
+    val sender = (EmailSender on "localhost:25").get()
+    
     // Non-safe way of instantiating an EmailSender: if you can't ensure the url is well-formed, you can declare a default object
-    val orDefaultSender = DefaultEmailSender on inputUrl `or else` DefaultEmailSender.of(host = "localhost", port = 25)
+    val orDefaultSender = EmailSender on inputUrl `or else` defaultSender
 
     // Non-safe way of instantiating an EmailSender: if you can't ensure the url is well-formed, you can declare a routine if parsing fails
-    val orThrowSender = DefaultEmailSender on inputUrl `or else` { throw RuntimeException(it.message, it.cause) }
+    val orThrowSender = EmailSender on inputUrl `or else` { throw RuntimeException(it.message, it.cause) }
 ```
 
 ### Create and email
@@ -61,4 +61,26 @@
 private val onError: (EmailError) -> Unit = { println("Error sending email: $it") }
 
 private val onSuccess: (Unit) -> Unit = { println("Mail sent!") }
+```
+
+### Single line integration
+
+// Single line integration
+
+```
+    
+    (EmailSender on "wrong_url")
+        .flatMap { it send (email from "from@from.com" to "to@to.com" subject "subject" body "body") }
+        .handle(success = { println("Mail sent!") }, error = { println("Error sending email: ${it.message}") })
+    // Will print -> Error sending email: Pattern must be [host]:[port]
+
+    (EmailSender on "localhost:25")
+        .flatMap { it send (email from "from" to "to@to.com" subject "subject" body "body") }
+        .handle(success = { println("Mail sent!") }, error = { println("Error sending email: ${it.message}") })
+    // Will print -> Error sending email: Invalid email address: from
+
+    (EmailSender on "localhost:25")
+        .flatMap { it send (email from "from@from.com" to "to@to.com" subject "subject" body "body") }
+        .handle(success = { println("Mail sent!") }, error = { println("Error sending email: ${it.message}") })
+    // Will print -> Error sending email: Error sending email
 ```

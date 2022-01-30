@@ -19,6 +19,8 @@ import javax.mail.internet.MimeBodyPart
 import javax.mail.internet.MimeMessage
 import javax.mail.internet.MimeMultipart
 
+typealias EmailSender = DefaultEmailSender
+
 class DefaultEmailSender private constructor(emailServer: EmailServer) : EmailSender {
     private val session: Session
 
