@@ -1,9 +1,11 @@
 package com.borvalcode.emailsender.infrastructure
 
 import arrow.core.Either
+import com.borvalcode.emailsender.domain.`or else`
 import com.borvalcode.emailsender.domain.dto.Email.Body.Part.Html
 import com.borvalcode.emailsender.domain.dto.Email.Body.Part.Text
 import com.borvalcode.emailsender.domain.dto.Email.Companion.email
+import com.borvalcode.emailsender.domain.get
 import com.borvalcode.emailsender.domain.handle
 import org.amshove.kluent.*
 import org.junit.jupiter.api.AfterEach

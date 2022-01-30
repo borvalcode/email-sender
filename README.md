@@ -91,4 +91,11 @@ private val onSuccess: (Unit) -> Unit = { println("Mail sent!") }
         .flatMap { it send (email from "from@from.com" to "to@to.com" subject "subject" body "body") }
         .handle(success = { println("Mail sent!") }, error = { println("Error sending email: ${it.message}") })
     // Will print -> "Error sending email: Error while sending" or "Mail sent!"
+    
+    // Simplest one line
+    (EmailSender.of("host", 25) send (email from "from@from.com" to "to@to.com" subject "subject" body "body"))
+        .handle(success = { println("Mail sent!") }, error = { println("Error sending email: ${it.message}") })
+
+    ((EmailSender on "wrong_url") send (email from "from@from.com" to "to@to.com" subject "subject" body "body"))
+        .handle(success = { println("Mail sent!") }, error = { println("Error sending email: ${it.message}") })
 ```

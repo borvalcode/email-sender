@@ -103,11 +103,3 @@ class DefaultEmailSender private constructor(emailServer: EmailServer) : EmailSe
 
 }
 
-infix fun <A, B> Either<A, B>.`or else`(onError: (A) -> B) =
-    this.fold(ifLeft = onError, ifRight = { it })
-
-infix fun <A, B> Either<A, B>.`or else`(b: B) =
-    this.fold(ifLeft = { b }, ifRight = { it })
-
-fun <B> Either<EmailError, B>.get() = this.fold(ifLeft = { throw RuntimeException(it.message, it.cause) },
-    ifRight = { it })
