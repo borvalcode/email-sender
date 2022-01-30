@@ -119,7 +119,7 @@ internal class DefaultEmailSenderTest {
         val actual =
             wrongSender send (email from "me@me.com" to "to@to.com" subject "Hello" body (Text of "Hello world!"))
 
-        (actual as Either.Left).value.message `should be equal to` "Error sending email"
+        (actual as Either.Left).value.message `should be equal to` "Error while sending"
 
     }
 

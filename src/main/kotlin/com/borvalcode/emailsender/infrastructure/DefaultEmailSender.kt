@@ -57,7 +57,7 @@ class DefaultEmailSender private constructor(emailServer: EmailServer) : EmailSe
                 Transport.send(message)
             }
         } catch (e: MessagingException) {
-            EmailError("Error sending email", e).left()
+            EmailError("Error while sending", e).left()
         }
 
 
